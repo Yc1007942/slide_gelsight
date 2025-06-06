@@ -214,8 +214,8 @@ class MultimodalTrainer:
     def save_detailed_results(self, true_labels, pred_labels, epoch):
         """保存详细的测试结果"""
         # 分类报告
-        report = classification_report(true_labels, pred_labels, 
-                                     target_names=[f'Material_{i+1}' for i in range(8)],
+        report = classification_report(true_labels, pred_labels,
+                                     target_names=[f'Material_{i+1}' for i in range(self.config['num_classes'])],
                                      output_dict=True)
         
         # 保存为JSON
@@ -226,8 +226,8 @@ class MultimodalTrainer:
         cm = confusion_matrix(true_labels, pred_labels)
         plt.figure(figsize=(10, 8))
         sns.heatmap(cm, annot=True, fmt='d', cmap='Blues',
-                   xticklabels=[f'M{i+1}' for i in range(8)],
-                   yticklabels=[f'M{i+1}' for i in range(8)])
+                   xticklabels=[f'M{i+1}' for i in range(self.config['num_classes'])],
+                   yticklabels=[f'M{i+1}' for i in range(self.config['num_classes'])])
         plt.title(f'Confusion Matrix - Epoch {epoch}')
         plt.ylabel('True Label')
         plt.xlabel('Predicted Label')
@@ -271,7 +271,7 @@ def main():
         'img_size': 224,                   # 图像尺寸
         'batch_size': 8,                   # 批次大小
         'num_workers': 4,                  # 数据加载进程数
-        'num_classes': 8,                  # 类别数
+        'num_classes': 10,                 # 类别数
         'img_hidden': 512,                 # 图像LSTM隐藏层维度
         'flow_hidden': 256,                # Flow LSTM隐藏层维度
         'learning_rate': 1e-4,             # 学习率
